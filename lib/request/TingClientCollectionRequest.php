@@ -21,7 +21,12 @@ class TingClientCollectionRequest extends TingClientSearchRequest {
   }
 
   public function getRequest() {
-    $this->setQuery('rec.id=' . $this->id);
+    if ($this->agency && variable_get('ting_filter_by_local_holdings', 0)) {
+      $this->setQuery('rec.id=' . $this->id . ' and holdingsitem.agencyid=' . $this->agency);
+    }
+    else {
+      $this->setQuery('rec.id=' . $this->id);
+    }
     $this->setAgency($this->agency);
     $this->setAllObjects(true);
     $this->setNumResults(1);
